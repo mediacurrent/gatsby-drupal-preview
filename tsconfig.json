@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "isolatedModules": false,
+    "rootDir": "src",
+    "outDir": "dist/",
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015",
+      "es2016.array.include",
+      "esnext.asynciterable"
+    ]
+  },
+  "include": ["src/**/*.ts"],
+  "strict": true
+}

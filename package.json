@@ -1,0 +1,41 @@
+{
+  "name": "gatsby-plugin-drupal-preview",
+  "version": "0.1.0",
+  "description": "A plugin to parse json data from Drupal preview api endpoint.",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*",
+    "index.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mediacurrent/gatsby-plugin-drupal-preview"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc --p ./tsconfig.json",
+    "watch": "npx tsc -w --p ./tsconfig.json",
+    "clean": "del-cli dist/*",
+    "prepublish": "npm run build",
+    "pub": "npm publish"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "jsonapi",
+    "drupal",
+    "preview"
+  ],
+  "author": "Media Current <andy.marquis@mediacurrent.com>",
+  "license": "0BSD",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "microbundle": "^0.15.1"
+  }
+}
