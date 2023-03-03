@@ -1,5 +1,5 @@
 <h1 align="center">
-  gatsby-plugin-drupal-preview
+  gatsby-drupal-preview
 </h1>
 
 Contains helper function to convert Drupal Json data into Gatsby Node object.
@@ -15,7 +15,7 @@ If you already have a Gatsby site, you can use it. Otherwise, you can [create a 
 
 2. Install this plugin in your Gatsby site.
 
-`npm install gatsby-plugin-drupal-preview`
+`npm install gatsby-drupal-preview`
 
 3. In your pages directory of your Gatsby site, create a new page using the file system route api pattern to accept parameters.
 
