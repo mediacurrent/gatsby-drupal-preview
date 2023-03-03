@@ -1,113 +1,133 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
 <h1 align="center">
-  Starter for a Gatsby Plugin
+  gatsby-plugin-drupal-preview
 </h1>
 
-A minimal boilerplate for the essential files Gatsby looks for in a plugin.
+Contains helper function to convert Drupal Json data into Gatsby Node object.
 
-## 🚀 Quick start
+## Quick start
 
 To get started creating a new plugin, you can follow these steps:
 
-1. Initialize a new plugin from the starter with `gatsby new`
+1. Install and configure the <a href="https://www.drupal.org/project/simple_decoupled_preview" target="_blank">Simple Decoupled Preview</a> module on your Drupal site.
 
-```shell
-gatsby new my-plugin https://github.com/gatsbyjs/gatsby-starter-plugin
-```
 
 If you already have a Gatsby site, you can use it. Otherwise, you can [create a new Gatsby site](https://www.gatsbyjs.com/tutorial/part-0/#create-a-gatsby-site) to test your plugin.
 
-Your directory structure will look similar to this:
+2. Install this plugin in your Gatsby site.
+
+`npm install gatsby-plugin-drupal-preview`
+
+3. In your pages directory of your Gatsby site, create a new page using the file system route api pattern to accept parameters.
+
+Your new page will look similar to this:
 
 ```text
 /my-gatsby-site
 ├── gatsby-config.js
 └── /src
     └── /pages
-        └── /index.js
-/my-plugin
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── package.json
-└── README.md
+        └── /preview
+            └──[...].jsx
 ```
 
-With `my-gatsby-site` being your Gatsby site, and `my-plugin` being your plugin. You could also include the plugin in your [site's `plugins` folder](https://www.gatsbyjs.com/docs/loading-plugins-from-your-local-plugins-folder/).
+4. This page url is what the Drupal iframe is going to link to including parameters to assist you with serving the proper Page template and making api request to your Drupal site to fetch the Json.
 
-2. Include the plugin in a Gatsby site
-
-Inside of the `gatsby-config.js` file of your site (in this case, `my-gatsby-site`), include the plugin in the `plugins` array:
-
-```javascript
-module.exports = {
-  plugins: [
-    // other gatsby plugins
-    // ...
-    require.resolve(`../my-plugin`),
-  ],
-}
-```
-
-The line `require.resolve('../my-plugin')` is what accesses the plugin based on its filepath on your computer, and adds it as a plugin when Gatsby runs.
-
-_You can use this method to test and develop your plugin before you publish it to a package registry like npm. Once published, you would instead install it and [add the plugin name to the array](https://www.gatsbyjs.com/docs/using-a-plugin-in-your-site/). You can read about other ways to connect your plugin to your site including using `npm link` or `yarn workspaces` in the [doc on creating local plugins](https://www.gatsbyjs.com/docs/creating-a-local-plugin/#developing-a-local-plugin-that-is-outside-your-project)._
-
-3. Verify the plugin was added correctly
-
-The plugin added by the starter implements a single Gatsby API in the `gatsby-node` that logs a message to the console. When you run `gatsby develop` or `gatsby build` in the site that implements your plugin, you should see this message.
-
-You can verify your plugin was added to your site correctly by running `gatsby develop` for the site.
-
-You should now see a message logged to the console in the preinit phase of the Gatsby build process:
-
-```shell
-$ gatsby develop
-success open and validate gatsby-configs - 0.033s
-success load plugins - 0.074s
-Loaded gatsby-starter-plugin
-success onPreInit - 0.016s
-...
-```
-
-4. Rename the plugin in the `package.json`
-
-When you clone the site, the information in the `package.json` will need to be updated. Name your plugin based off of [Gatsby's conventions for naming plugins](https://www.gatsbyjs.com/docs/naming-a-plugin/).
-
-## 🧐 What's inside?
-
-This starter generates the [files Gatsby looks for in plugins](https://www.gatsbyjs.com/docs/files-gatsby-looks-for-in-a-plugin/).
+An example iframe url will be composed as in this example:
 
 ```text
-/my-plugin
-├── .gitignore
-├── gatsby-browser.js
-├── gatsby-node.js
-├── gatsby-ssr.js
-├── index.js
-├── LICENSE
-├── package.json
-└── README.md
+https://www.mygatsbysite.com/preview/{bundle}/{uuid}/{langcode}/{uid}
+```
+How to use the parameters:
+
+* {bundle} - This is the node type of the preview node. Use this to determine which template on your Gatsby site to pass the data to.
+* {uuid} - This is the UUID property of the preview node.
+* {langcode} - This is the language code of the preview node.
+* {uid} - This is the ID of the user that triggered the preview in Drupal.
+
+An actual iframe url example that depicts these parameters:
+```text
+http://localhost:8000/preview/page/ed8145e8-33c4-4497-b4e0-c441f1ad3079/en/1
 ```
 
-- **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-- **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-- **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-- **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-- **`index.js`**: A file that will be loaded by default when the plugin is [required by another application](https://docs.npmjs.com/creating-node-js-modules#create-the-file-that-will-be-loaded-when-your-module-is-required-by-another-application0). You can adjust what file is used by updating the `main` field of the `package.json`.
-- **`LICENSE`**: This plugin starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-- **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the plugin's name, author, etc). This manifest is how npm knows which packages to install for your project.
-- **`README.md`**: A text file containing useful reference information about your plugin.
 
-## 🎓 Learning Gatsby
+## How to use the plugin
 
-If you're looking for more guidance on plugins, how they work, or what their role is in the Gatsby ecosystem, check out some of these resources:
+In your Preview page template, import the helper function from this plugin.
+```javascript
+import {createNodeFromPreview} from "gatsby-plugin-preview"
+```
+Import your page templates. Example:
+```javascript
+import ArticleTemplate from "../../templates/article"
+import PageTemplate from "../../templates/page"
+```
+Alternatively, you can lazyload the templates and create a helper function to return the desired template.
+```javascript
+const pageTemplates = {
+  page: React.lazy(() => import("../../templates/page")),
+  article: React.lazy(() => import("../../templates/article"))
+}
 
-- The [Creating Plugins](https://www.gatsbyjs.com/docs/creating-plugins/) section of the docs has information on authoring and maintaining plugins yourself.
-- The conceptual guide on [Plugins, Themes, and Starters](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/) compares and contrasts plugins with other pieces of the Gatsby ecosystem. It can also help you [decide what to choose between a plugin, starter, or theme](https://www.gatsbyjs.com/docs/plugins-themes-and-starters/#deciding-which-to-use).
-- The [Gatsby plugin library](https://www.gatsbyjs.com/plugins/) has over 1750 official as well as community developed plugins that can get you up and running faster and borrow ideas from.
+// Helper function.
+const getTemplate = (bundle, data) => {
+  if (pageTemplates.hasOwnProperty(bundle)) {
+    const PreviewTemplate = pageTemplates[bundle]
+    return (
+      <React.Suspense fallback={<>Loading ${bundle} template...</>}>
+        <PreviewTemplate data={data}/>
+      </React.Suspense>
+    )
+  }
+  return null;
+}
+```
+## Example Fetching the data with Axios from Drupal
+This is only an example to get you started. Your exact implementation could be entirely different.
+```javascript
+const PreviewPage = ({...props}) => {
+  const [state, setState] = React.useState({
+    data: undefined,
+    error: null,
+    loaded: false,
+  });
+
+  const { data, error, loaded } = state;
+
+  const splat = props.params[`*`]
+  const [bundle, uuid, langcode, uid] = splat.split('/')
+  // We need to define the baseUrl for images.
+  const baseUrl = process.env.GATSBY_BASE_URL || ''
+
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const endpoint = `${process.env.GATSBY_BASE_URL}/api/preview/${uuid}`;
+        const response = await axios.get(endpoint, {
+          headers: {
+            "api-key": process.env.GATSBY_API_KEY || "",
+          },
+          params: {
+            langcode,
+            uid,
+          },
+        });
+        setState({ data: createNodeFromPreview(response.data, baseUrl, 'node'), error: null, loaded: true });
+      } catch (e) {
+        setState({ data: undefined, error: e.message, loaded: true });
+      }
+    }
+    fetchData();
+  }, [uuid, langcode]);
+
+  if (error || !loaded) {
+    // Return something else in case of error and while data is fetching.
+  }
+  if (data) {
+    return getTemplate(bundle, data)
+  }
+  return null
+}
+
+export default PreviewPage
+```
+
