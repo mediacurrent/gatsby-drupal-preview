@@ -111,7 +111,7 @@ const PreviewPage = ({...props}) => {
             uid,
           },
         });
-        setState({ data: createNodeFromPreview(response.data, baseUrl, 'node'), error: null, loaded: true });
+        setState({ data: createNodeFromPreview(response.data, baseUrl), error: null, loaded: true });
       } catch (e) {
         setState({ data: undefined, error: e.message, loaded: true });
       }
@@ -130,4 +130,22 @@ const PreviewPage = ({...props}) => {
 
 export default PreviewPage
 ```
+## About Helper Function
+Note: The createNodeFromPreview(data, baseUrl, nodeAlias) function arguments:
+1. data - REQUIRED - This is the data object received from api response.
+2. baseUrl - REQUIRED(for images) - This is used to programmatically create a PublicUrl property pointing to the files on your Drupal site.
+3. nodeAlias - OPTIONAL - If you've aliased your graphql nodes like in this example, you can pass the alias in through the function. Otherwise, the function will create camelCase name consistent with Gatsby's handling of GraphQL.
 
+```javascript
+export const query = graphql`
+  query($id: String!) {
+    node: nodeArticle (id: {eq: $id}) {
+      title
+      langcode
+      body {
+        processed
+      }
+    }
+  }
+`
+```
