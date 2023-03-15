@@ -93,8 +93,8 @@ const PreviewPage = ({...props}) => {
 
   const { data, error, loaded } = state;
 
-  const splat = props.params[`*`]
-  const [bundle, uuid, langcode, uid] = splat.split('/')
+  const splat = props.params[`*`]?.split('/') || []
+  const [bundle, uuid, langcode, uid] = splat
   // We need to define the baseUrl for images.
   const baseUrl = process.env.GATSBY_BASE_URL || ''
 
