@@ -1,6 +1,6 @@
 {
   "name": "gatsby-drupal-preview",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A plugin to parse json data from Drupal preview api endpoint.",
   "source": "src/index.ts",
   "main": "dist/index.js",

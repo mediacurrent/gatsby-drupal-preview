@@ -15,7 +15,13 @@ export const createNodeFromPreview = (data: JsonApiResponse, baseUrl: string, no
     data.included.forEach((resource) => includedById.set(resource.id, resource));
   }
 
-  const getInclude = (node: JsonApiRelationshipObject): GatsbyDrupalNode | undefined => {
+  const getInclude = (node: JsonApiRelationshipObject, visitedNodes = new Set<string>()): GatsbyDrupalNode | undefined => {
+    if (visitedNodes.has(node.id)) {
+      return undefined;
+    }
+
+    visitedNodes.add(node.id);
+
     const match = includedById.get(node.id);
     if (match) {
       const relationships: Record<string, any> = {};
@@ -26,7 +32,7 @@ export const createNodeFromPreview = (data: JsonApiResponse, baseUrl: string, no
             if (Array.isArray(data)) {
               const includes: any[] = [];
               for (const item of data) {
-                const include = getInclude(item);
+                const include = getInclude(item, visitedNodes);
                 if (include) {
                   includes.push({ ...include, id: item.id });
                 }
@@ -34,15 +40,17 @@ export const createNodeFromPreview = (data: JsonApiResponse, baseUrl: string, no
               if (includes.length) {
                 relationships[key] = includes;
               }
-            } else {
-              const include = getInclude(data);
+            }
+            else {
+              const include = getInclude(data, visitedNodes);
               if (include) {
                 if (data.type === "file--file") {
                   const meta = data.meta;
                   const src = `${baseUrl}${include.uri.url}`;
-                  relationships[key] = { ...include, publicUrl: src };
-                } else {
-                  relationships[key] = { ...include };
+                  relationships[key] = { ...include, ...data?.meta, publicUrl: src };
+                }
+                else {
+                  relationships[key] = { ...include, ...data?.meta };
                 }
               }
             }
@@ -50,7 +58,14 @@ export const createNodeFromPreview = (data: JsonApiResponse, baseUrl: string, no
         }
       }
       const type = match.type.replace(/-|__|:|\.|\s/g, "_");
-      return { ...match.attributes, __typename: type, relationships };
+      const result = { ...match.attributes, __typename: type, relationships };
+
+      // Check if the relationships object is empty
+      if (Object.keys(relationships).length === 0) {
+        delete result.relationships;
+      }
+
+      return result;
     }
   };
 
